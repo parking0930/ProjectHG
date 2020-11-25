@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import javax.swing.ImageIcon;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class MainFrame extends javax.swing.JFrame {
     public static UserDTO userinfo; // 유저 정보
@@ -1720,6 +1721,29 @@ public class MainFrame extends javax.swing.JFrame {
         lblNickSelect.setText(userinfo.getNickname());
         lblPointSelect.setText("포인트 : "+userinfo.getPoint()+"P");
         lblMyWinLoseSelect.setText(userinfo.getWin()+"승 "+userinfo.getLose()+"패");
+        //
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(new Object [][] {
+                {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null},
+                {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null},
+                {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null},
+                {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null},
+                {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null},
+                {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null},
+                {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}
+            }, new String [] { "번호", "제목", "방장", "인원"}){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+        jTable1.getColumnModel().getColumn(0).setMaxWidth(50);
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(50);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(350);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(350);
+        jTable1.getColumnModel().getColumn(2).setMaxWidth(100);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(3).setMaxWidth(100);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(100);
     }
     /////////////////////////////////////////////////////Wait Room/////////////////////////////////////////////////////
     public void showWaitRoom(){
