@@ -7,9 +7,12 @@ import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 public class MainFrame extends javax.swing.JFrame {
     public static UserDTO userinfo; // 유저 정보
@@ -1721,7 +1724,7 @@ public class MainFrame extends javax.swing.JFrame {
         lblNickSelect.setText(userinfo.getNickname());
         lblPointSelect.setText("포인트 : "+userinfo.getPoint()+"P");
         lblMyWinLoseSelect.setText(userinfo.getWin()+"승 "+userinfo.getLose()+"패");
-        //
+        // 테이블 세팅
         jTable1.setModel(new javax.swing.table.DefaultTableModel(new Object [][] {
                 {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null},
                 {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null}, {null, null, null, null},
@@ -1736,6 +1739,16 @@ public class MainFrame extends javax.swing.JFrame {
                 return false;
             }
         });
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        JTableHeader Theader = jTable1.getTableHeader();
+        Theader.setForeground(Color.BLACK);
+        ((DefaultTableCellRenderer)Theader.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        jTable1.setTableHeader(Theader);
+        jTable1.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        jTable1.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        jTable1.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        jTable1.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(50);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(50);
         jTable1.getColumnModel().getColumn(1).setMaxWidth(350);
