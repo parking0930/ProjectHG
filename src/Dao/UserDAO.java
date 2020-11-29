@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserDAO {
     private PreparedStatement pstmt;
@@ -13,8 +14,8 @@ public class UserDAO {
     
     public UserDAO() {
         try {
-            String schema = "javahg"; // 본인 스키마 입력
-            String dbURL = "jdbc:mysql://localhost:3306/"+schema+"?serverTimezone=UTC";
+            String schema = "javahg" ; // 본인 스키마 입력
+            String dbURL = "jdbc:mysql://127.0.0.1:3306/"+schema+"?serverTimezone=UTC";
             String dbID = "root";
             String dbPassword = "wogus4735"; // 본인 패스워드 입력
             Class.forName("com.mysql.cj.jdbc.Driver");

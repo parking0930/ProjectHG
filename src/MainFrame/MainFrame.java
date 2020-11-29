@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 public class MainFrame extends javax.swing.JFrame {
+    public static ClientBackground client;
     public static UserDTO userinfo; // 유저 정보
     public static Timer turnTimer = new Timer(); // 인게임 턴용 타이머
     public static Timer AllTimer = new Timer(); // 인게임 전체 제한 시간 타이머
@@ -27,6 +28,8 @@ public class MainFrame extends javax.swing.JFrame {
     int xx; // 이전 x좌표 기억
     int yy; // 이전 y좌표 기억
     
+    public static boolean isReady;
+    
     public MainFrame() {
         initComponents();
         // 나가기 이미지
@@ -36,6 +39,67 @@ public class MainFrame extends javax.swing.JFrame {
         //openGame();
     }
 
+    public void Ready(String r1, String r2){
+        if(r1.equals("1")){
+            imgicon = new ImageIcon(MainFrame.class.getResource("./image/complete.png"));
+            img = imgicon.getImage().getScaledInstance(lblState1.getWidth(), lblState1.getHeight(), Image.SCALE_SMOOTH);
+            lblState1.setIcon(new ImageIcon(img));
+        }else if(r1.equals("0")){
+            imgicon = new ImageIcon(MainFrame.class.getResource("./image/prepare.png"));
+            img = imgicon.getImage().getScaledInstance(lblState1.getWidth(), lblState1.getHeight(), Image.SCALE_SMOOTH);
+            lblState1.setIcon(new ImageIcon(img));
+        }
+        if(r2.equals("1")){
+            imgicon = new ImageIcon(MainFrame.class.getResource("./image/complete.png"));
+            img = imgicon.getImage().getScaledInstance(lblState2.getWidth(), lblState2.getHeight(), Image.SCALE_SMOOTH);
+            lblState2.setIcon(new ImageIcon(img));
+        }else if(r2.equals("0")){
+            imgicon = new ImageIcon(MainFrame.class.getResource("./image/prepare.png"));
+            img = imgicon.getImage().getScaledInstance(lblState2.getWidth(), lblState2.getHeight(), Image.SCALE_SMOOTH);
+            lblState2.setIcon(new ImageIcon(img));
+        }
+        if(r1.equals("1")&&r2.equals("1")){ // 둘 다 준비 상태면..
+            InGame.setLocation(WaitRoom.getLocation().x, WaitRoom.getLocation().y);
+            openGame();
+        }
+    }
+
+    public void userSet(String u1, String u2){
+        // 나의 프로필 이미지
+        UserDAO userDB = new UserDAO();
+        UserDTO tmpData;
+        System.out.println(u1+"@"+u2);
+        if(!u1.equals("X")){
+            imgicon = new ImageIcon(MainFrame.class.getResource("./image/profile.png"));
+            img = imgicon.getImage().getScaledInstance(lblProfile1.getWidth(), lblProfile1.getHeight(), Image.SCALE_SMOOTH);
+            lblProfile1.setIcon(new ImageIcon(img));
+            imgicon = new ImageIcon(MainFrame.class.getResource("./image/prepare.png"));
+            img = imgicon.getImage().getScaledInstance(lblState1.getWidth(), lblState1.getHeight(), Image.SCALE_SMOOTH);
+            lblState1.setIcon(new ImageIcon(img));
+            tmpData = userDB.getUserData(u1);
+            lblNick1.setText(tmpData.getNickname());
+            lblPoint1.setText("포인트 : "+tmpData.getPoint()+"P");
+            lblwl1.setText(tmpData.getWin()+"승 "+tmpData.getLose()+"패");
+        }
+        if(!u2.equals("X")){
+            imgicon = new ImageIcon(MainFrame.class.getResource("./image/profile.png"));
+            img = imgicon.getImage().getScaledInstance(lblProfile2.getWidth(), lblProfile2.getHeight(), Image.SCALE_SMOOTH);
+            lblProfile2.setIcon(new ImageIcon(img));
+            imgicon = new ImageIcon(MainFrame.class.getResource("./image/prepare.png"));
+            img = imgicon.getImage().getScaledInstance(lblState2.getWidth(), lblState2.getHeight(), Image.SCALE_SMOOTH);
+            lblState2.setIcon(new ImageIcon(img));
+            tmpData = userDB.getUserData(u2);
+            lblNick2.setText(tmpData.getNickname());
+            lblPoint2.setText("포인트 : "+tmpData.getPoint()+"P");
+            lblwl2.setText(tmpData.getWin()+"승 "+tmpData.getLose()+"패");
+        }
+    }
+    
+    public void ExitInGame(){
+        WaitRoom.setLocation(InGame.getLocation().x,InGame.getLocation().y);
+        showWaitRoom();
+        InGame.hide();
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -87,8 +151,16 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         lblState2 = new javax.swing.JLabel();
+        lblProfile2 = new javax.swing.JLabel();
+        lblwl2 = new javax.swing.JLabel();
+        lblPoint2 = new javax.swing.JLabel();
+        lblNick2 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         lblState1 = new javax.swing.JLabel();
+        lblProfile1 = new javax.swing.JLabel();
+        lblNick1 = new javax.swing.JLabel();
+        lblPoint1 = new javax.swing.JLabel();
+        lblwl1 = new javax.swing.JLabel();
         lblReady = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -140,6 +212,17 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         btnRefresh = new javax.swing.JButton();
         lblSelectRoomExit = new javax.swing.JLabel();
+        btnJoin = new javax.swing.JButton();
+        CreateRoom = new javax.swing.JFrame();
+        CreateTitle = new javax.swing.JPanel();
+        btnCreateExit = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        lbllogoCreate = new javax.swing.JLabel();
+        jPanel19 = new javax.swing.JPanel();
+        txtCreateRoom = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        btnCreate = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         MainTitle = new javax.swing.JPanel();
         btnMainExit = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -642,25 +725,63 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel11.setBackground(new java.awt.Color(255, 255, 255));
         jPanel11.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
+        lblwl2.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblwl2.setText("　");
+        lblwl2.setToolTipText("");
+
+        lblPoint2.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblPoint2.setText("　");
+
+        lblNick2.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblNick2.setText("　");
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblState2, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+                .addComponent(lblState2, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblProfile2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNick2)
+                    .addComponent(lblwl2)
+                    .addComponent(lblPoint2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblProfile2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(lblNick2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblPoint2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblwl2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblState2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
         jPanel12.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+
+        lblNick1.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblNick1.setText("닉네임");
+
+        lblPoint1.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblPoint1.setText("포인트 : 0P");
+
+        lblwl1.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblwl1.setText("0승 0패");
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -670,17 +791,39 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblState1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblProfile1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNick1)
+                    .addComponent(lblwl1)
+                    .addComponent(lblPoint1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblProfile1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(lblNick1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblPoint1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblwl1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblState1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
 
         lblReady.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblReady.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblReadyMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 lblReadyMouseEntered(evt);
             }
@@ -770,11 +913,11 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
+                .addGap(20, 20, 20)
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblReady, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
         );
@@ -787,8 +930,8 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblReady, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(23, 23, 23))
         );
 
@@ -1166,6 +1309,11 @@ public class MainFrame extends javax.swing.JFrame {
         btnCreateRoom.setFont(new java.awt.Font("맑은 고딕", 1, 25)); // NOI18N
         btnCreateRoom.setForeground(new java.awt.Color(255, 255, 255));
         btnCreateRoom.setText("방 만들기");
+        btnCreateRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateRoomActionPerformed(evt);
+            }
+        });
 
         jPanel17.setBackground(new java.awt.Color(255, 255, 255));
         jPanel17.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1245,11 +1393,26 @@ public class MainFrame extends javax.swing.JFrame {
         btnRefresh.setFont(new java.awt.Font("맑은 고딕", 1, 25)); // NOI18N
         btnRefresh.setForeground(new java.awt.Color(255, 255, 255));
         btnRefresh.setText("새로고침");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
         lblSelectRoomExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblSelectRoomExit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblSelectRoomExitMouseClicked(evt);
+            }
+        });
+
+        btnJoin.setBackground(new java.awt.Color(0, 0, 0));
+        btnJoin.setFont(new java.awt.Font("맑은 고딕", 1, 25)); // NOI18N
+        btnJoin.setForeground(new java.awt.Color(255, 255, 255));
+        btnJoin.setText("참여");
+        btnJoin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnJoinActionPerformed(evt);
             }
         });
 
@@ -1260,13 +1423,21 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCreateRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblSelectRoomExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18))
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCreateRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
+                                .addComponent(btnJoin, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(lblSelectRoomExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1279,10 +1450,12 @@ public class MainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCreateRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnJoin, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addComponent(lblSelectRoomExit, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(12, 12, 12))
+                .addGap(25, 25, 25))
         );
 
         javax.swing.GroupLayout SelectRoomLayout = new javax.swing.GroupLayout(SelectRoom.getContentPane());
@@ -1298,6 +1471,136 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(SelectRoomTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        CreateRoom.setUndecorated(true);
+
+        CreateTitle.setBackground(new java.awt.Color(0, 0, 0));
+        CreateTitle.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                CreateTitleMouseDragged(evt);
+            }
+        });
+        CreateTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                CreateTitleMousePressed(evt);
+            }
+        });
+
+        btnCreateExit.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        btnCreateExit.setForeground(new java.awt.Color(255, 255, 255));
+        btnCreateExit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnCreateExit.setText("X");
+        btnCreateExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCreateExit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCreateExit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCreateExitMouseClicked(evt);
+            }
+        });
+
+        jLabel17.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("Project HG");
+        jLabel17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        lbllogoCreate.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lbllogoCreate.setForeground(new java.awt.Color(255, 255, 255));
+        lbllogoCreate.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbllogoCreate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout CreateTitleLayout = new javax.swing.GroupLayout(CreateTitle);
+        CreateTitle.setLayout(CreateTitleLayout);
+        CreateTitleLayout.setHorizontalGroup(
+            CreateTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CreateTitleLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(lbllogoCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCreateExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        CreateTitleLayout.setVerticalGroup(
+            CreateTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lbllogoCreate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(CreateTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnCreateExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel19.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel19.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel16.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        jLabel16.setText("Room : ");
+
+        btnCreate.setBackground(new java.awt.Color(0, 0, 0));
+        btnCreate.setFont(new java.awt.Font("맑은 고딕", 1, 25)); // NOI18N
+        btnCreate.setForeground(new java.awt.Color(255, 255, 255));
+        btnCreate.setText("생성");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
+
+        btnBack.setBackground(new java.awt.Color(0, 0, 0));
+        btnBack.setFont(new java.awt.Font("맑은 고딕", 1, 25)); // NOI18N
+        btnBack.setForeground(new java.awt.Color(255, 255, 255));
+        btnBack.setText("취소");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel19Layout.createSequentialGroup()
+                        .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6))
+                    .addGroup(jPanel19Layout.createSequentialGroup()
+                        .addComponent(jLabel16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtCreateRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(40, 40, 40))
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCreateRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(45, 45, 45)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40))
+        );
+
+        javax.swing.GroupLayout CreateRoomLayout = new javax.swing.GroupLayout(CreateRoom.getContentPane());
+        CreateRoom.getContentPane().setLayout(CreateRoomLayout);
+        CreateRoomLayout.setHorizontalGroup(
+            CreateRoomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(CreateTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        CreateRoomLayout.setVerticalGroup(
+            CreateRoomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CreateRoomLayout.createSequentialGroup()
+                .addComponent(CreateTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1394,6 +1697,11 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel11.setText("아이디/비밀번호 찾기");
         jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        txtLoginPW.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLoginPWActionPerformed(evt);
+            }
+        });
         txtLoginPW.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtLoginPWKeyPressed(evt);
@@ -1526,6 +1834,7 @@ public class MainFrame extends javax.swing.JFrame {
         SelectRoom.setLocation(WaitRoom.getLocation().x, WaitRoom.getLocation().y);
         WaitRoom.hide();
         showSelectRoom();
+        client.sendMessage("exitroom");
     }//GEN-LAST:event_btnWaitRoomExitMouseClicked
 
     private void WaitRoomTitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_WaitRoomTitleMouseDragged
@@ -1538,7 +1847,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_WaitRoomTitleMousePressed
 
     private void btnInGameExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInGameExitMouseClicked
-        InGame.hide();
+        client.sendMessage("endGame");
     }//GEN-LAST:event_btnInGameExitMouseClicked
 
     private void InGameTitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_InGameTitleMouseDragged
@@ -1619,6 +1928,13 @@ public class MainFrame extends javax.swing.JFrame {
         if(userDB.login(txtLoginID.getText(), String.valueOf(txtLoginPW.getPassword()))){
             userinfo = userDB.getUserData(txtLoginID.getText());
             SelectRoom.setLocation(MainFrame.this.getLocation().x, MainFrame.this.getLocation().y);
+            
+            client = new ClientBackground();
+            client.setGui(jTable1);
+            client.setFrame(this);
+            client.setNickname(txtLoginID.getText());
+            client.connet();
+            
             MainFrame.this.hide();
             showSelectRoom();
         }else{
@@ -1627,6 +1943,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnSelectRoomExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelectRoomExitMouseClicked
+        
         MainFrame.this.setLocation(SelectRoom.getLocation().x, SelectRoom.getLocation().y);
         SelectRoom.hide();
         MainFrame.this.show();
@@ -1650,13 +1967,75 @@ public class MainFrame extends javax.swing.JFrame {
         //////////////////// 테스트용//////////////////////
         WaitRoom.setLocation(SelectRoom.getLocation().x, SelectRoom.getLocation().y);
         SelectRoom.hide();
-        showWaitRoom();
+        client.sendMessage("exitroom");
         //////////////////////////////////////////////////
         /*
         MainFrame.this.setLocation(SelectRoom.getLocation().x, SelectRoom.getLocation().y);
         SelectRoom.hide();
         MainFrame.this.show();*/
     }//GEN-LAST:event_lblSelectRoomExitMouseClicked
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        //server.sendMessage("f5");
+        client.sendMessage("f5");
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnCreateRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRoomActionPerformed
+        showCreateRoom();
+    }//GEN-LAST:event_btnCreateRoomActionPerformed
+
+    private void btnCreateExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCreateExitMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCreateExitMouseClicked
+
+    private void CreateTitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CreateTitleMouseDragged
+        CreateRoom.setLocation(evt.getXOnScreen()-xx , evt.getYOnScreen()-yy);
+    }//GEN-LAST:event_CreateTitleMouseDragged
+
+    private void CreateTitleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CreateTitleMousePressed
+        xx = evt.getX();
+        yy= evt.getY();
+    }//GEN-LAST:event_CreateTitleMousePressed
+
+    private void txtLoginPWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginPWActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLoginPWActionPerformed
+
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        String name = txtCreateRoom.getText().trim();
+        if(name.equals("")){
+            return;
+        }
+        WaitRoom.setLocation(CreateRoom.getLocation().x, CreateRoom.getLocation().y);
+        showWaitRoom();
+        SelectRoom.dispose();
+        CreateRoom.dispose();
+        client.sendMessage("create,"+name);
+    }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        CreateRoom.dispose();
+        showSelectRoom();
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnJoinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinActionPerformed
+        int a =jTable1.getSelectedRow();  //no
+        
+        if(jTable1.getModel().getValueAt(a,0).toString() == null)
+            return;
+        
+        if(jTable1.getValueAt(a, 3).equals("1")){
+            WaitRoom.setLocation(SelectRoom.getLocation().x,SelectRoom.getLocation().y);
+            showWaitRoom();
+            client.sendMessage("join,"+(String) jTable1.getValueAt(a, 0));
+            SelectRoom.dispose();
+            CreateRoom.dispose();
+        }
+    }//GEN-LAST:event_btnJoinActionPerformed
+
+    private void lblReadyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblReadyMouseClicked
+       client.sendMessage("ready");
+    }//GEN-LAST:event_lblReadyMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -1758,12 +2137,28 @@ public class MainFrame extends javax.swing.JFrame {
         jTable1.getColumnModel().getColumn(3).setMaxWidth(100);
         jTable1.getColumnModel().getColumn(3).setPreferredWidth(100);
     }
+    /////////////////////////////////////////////////////Create Room/////////////////////////////////////////////////////
+    public void showCreateRoom(){
+        CreateRoom.setSize(466, 268);
+        CreateRoom.setLocation(SelectRoom.getLocation().x,SelectRoom.getLocation().y);
+        CreateRoom.show();
+        // 로고 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("./image/settings.png"));
+        img = imgicon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        lbllogoCreate.setIcon(new ImageIcon(img));
+    }
     /////////////////////////////////////////////////////Wait Room/////////////////////////////////////////////////////
     public void showWaitRoom(){
-        WaitRoom.setSize(962, 395);
+        WaitRoom.setSize(978, 395);
         //WaitRoom.setLocation(MainFrame.this.getLocation().x, MainFrame.this.getLocation().y);
         WaitRoom.setResizable(false);
         WaitRoom.show();
+        // 준비 상태 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("./image/white.png"));
+        img = imgicon.getImage().getScaledInstance(lblState1.getWidth(), lblState1.getHeight(), Image.SCALE_SMOOTH);
+        lblState1.setIcon(new ImageIcon(img));
+        img = imgicon.getImage().getScaledInstance(lblState1.getWidth(), lblState2.getHeight(), Image.SCALE_SMOOTH);
+        lblState2.setIcon(new ImageIcon(img));
         // 로고 이미지
         imgicon = new ImageIcon(MainFrame.class.getResource("./image/settings.png"));
         img = imgicon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -1776,12 +2171,6 @@ public class MainFrame extends javax.swing.JFrame {
         imgicon = new ImageIcon(MainFrame.class.getResource("./image/profile.png"));
         img = imgicon.getImage().getScaledInstance(lblMyProfileInWait.getWidth(), lblMyProfileInWait.getHeight(), Image.SCALE_SMOOTH);
         lblMyProfileInWait.setIcon(new ImageIcon(img));
-        // 준비 상태 이미지
-        imgicon = new ImageIcon(MainFrame.class.getResource("./image/prepare.png"));
-        img = imgicon.getImage().getScaledInstance(lblState1.getWidth(), lblState1.getHeight(), Image.SCALE_SMOOTH);
-        lblState1.setIcon(new ImageIcon(img));
-        img = imgicon.getImage().getScaledInstance(lblState1.getWidth(), lblState2.getHeight(), Image.SCALE_SMOOTH);
-        lblState2.setIcon(new ImageIcon(img));
         // 유저 정보 세팅
         lblMyNickWait.setText(userinfo.getNickname());
         lblMyPointWait.setText("포인트 : "+userinfo.getPoint()+"P");
@@ -1892,6 +2281,8 @@ public class MainFrame extends javax.swing.JFrame {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFrame CreateRoom;
+    private javax.swing.JPanel CreateTitle;
     private javax.swing.JFrame InGame;
     private javax.swing.JPanel InGameTitle;
     private javax.swing.JPanel MainTitle;
@@ -1901,9 +2292,13 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel SignUpTitle;
     private javax.swing.JFrame WaitRoom;
     private javax.swing.JPanel WaitRoomTitle;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnCreate;
+    private javax.swing.JLabel btnCreateExit;
     private javax.swing.JButton btnCreateRoom;
     private javax.swing.JButton btnIDcheck;
     private javax.swing.JLabel btnInGameExit;
+    private javax.swing.JButton btnJoin;
     private javax.swing.JButton btnLogin;
     private javax.swing.JLabel btnMainExit;
     private javax.swing.JButton btnNicknameCheck;
@@ -1920,6 +2315,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1938,6 +2335,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1971,12 +2369,18 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblMyWinLoseInGame;
     private javax.swing.JLabel lblMyWinLoseSelect;
     private javax.swing.JLabel lblMyWinLoseWait;
+    private javax.swing.JLabel lblNick1;
+    private javax.swing.JLabel lblNick2;
     private javax.swing.JLabel lblNickSelect;
     private javax.swing.JLabel lblPW;
     private javax.swing.JLabel lblPWCheck;
     private javax.swing.JLabel lblPWResult;
+    private javax.swing.JLabel lblPoint1;
+    private javax.swing.JLabel lblPoint2;
     private javax.swing.JLabel lblPointSelect;
     private javax.swing.JLabel lblProfile;
+    private javax.swing.JLabel lblProfile1;
+    private javax.swing.JLabel lblProfile2;
     private javax.swing.JLabel lblReady;
     private javax.swing.JLabel lblRed;
     private javax.swing.JLabel lblRedClick;
@@ -1991,14 +2395,18 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblTurnName;
     private javax.swing.JLabel lblYourNickname1;
     private javax.swing.JLabel lblYourProfile;
+    private javax.swing.JLabel lbllogoCreate;
     private javax.swing.JLabel lbllogoInGame;
     private javax.swing.JLabel lbllogoMain;
     private javax.swing.JLabel lbllogoSelectRoom;
     private javax.swing.JLabel lbllogoSignUp;
     private javax.swing.JLabel lbllogoWaitRoom;
+    private javax.swing.JLabel lblwl1;
+    private javax.swing.JLabel lblwl2;
     private javax.swing.JPanel pnlMy;
     private javax.swing.JPanel pnlYour;
     private javax.swing.JTextField txtChat;
+    private javax.swing.JTextField txtCreateRoom;
     private javax.swing.JTextField txtLoginID;
     private javax.swing.JPasswordField txtLoginPW;
     private javax.swing.JPasswordField txtPW;
