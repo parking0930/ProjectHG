@@ -46,7 +46,7 @@ public class UserDAO {
     }
     
     public UserDTO getUserData(String id) {
-        String sql = "select id, nickname, win, lose, point from member where id = ?";
+        String sql = "select id, nickname, win, lose, point, date from member where id = ?";
 
         try {
             pstmt = conn.prepareStatement(sql);
@@ -60,6 +60,7 @@ public class UserDAO {
             userinfo.setWin(rs.getInt(3));
             userinfo.setLose(rs.getInt(4));
             userinfo.setPoint(rs.getInt(5));
+            userinfo.setDate(rs.getString(6).split(" ")[0]);
             
             return userinfo;
         } catch (Exception e) {
@@ -114,6 +115,20 @@ public class UserDAO {
             pstmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+        //비밀번호 변경 // 찾을 id, 변경할 pwd 인수
+    public void myPagePwdUpdate(String id, String pwd){
+        String sql = "update member set password = ? where id = ?";
+        
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, pwd);
+            pstmt.setString(2, id);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            
         }
     }
 }

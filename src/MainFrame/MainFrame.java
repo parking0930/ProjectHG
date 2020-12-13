@@ -223,6 +223,30 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         btnCreate = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        MyPage = new javax.swing.JFrame();
+        MyPageTitle = new javax.swing.JPanel();
+        btnMyPageExit = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        lbllogoMyPage = new javax.swing.JLabel();
+        MyPageInfo = new javax.swing.JPanel();
+        lblMyPageNick = new javax.swing.JLabel();
+        lblMyPageLose = new javax.swing.JLabel();
+        lblMyPageWin = new javax.swing.JLabel();
+        lblMyPageDate = new javax.swing.JLabel();
+        lblMyPagePoint = new javax.swing.JLabel();
+        lblMyPageId = new javax.swing.JLabel();
+        lblMyPagePWD = new javax.swing.JLabel();
+        lblMyPagePWDchk = new javax.swing.JLabel();
+        txtMyPageWin = new javax.swing.JTextField();
+        txtMyPageNick = new javax.swing.JTextField();
+        txtMyPageDate = new javax.swing.JTextField();
+        txtMyPagePoint = new javax.swing.JTextField();
+        txtMyPageLose = new javax.swing.JTextField();
+        txtMyPageId = new javax.swing.JTextField();
+        txtMyPagePWD = new javax.swing.JPasswordField();
+        txtMyPagePWDchk = new javax.swing.JPasswordField();
+        btnMyPageApply = new javax.swing.JButton();
+        lblPWDchkResult = new javax.swing.JLabel();
         MainTitle = new javax.swing.JPanel();
         btnMainExit = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -464,6 +488,11 @@ public class MainFrame extends javax.swing.JFrame {
         lblMyPage.setForeground(new java.awt.Color(51, 51, 255));
         lblMyPage.setText("마이페이지");
         lblMyPage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblMyPage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblMyPageMouseClicked(evt);
+            }
+        });
 
         lblMyWinLoseInGame.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
         lblMyWinLoseInGame.setText("0승 0패");
@@ -672,8 +701,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText("Project HG");
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel14.setText("Project HG - InGame");
         jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         lbllogoInGame.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
@@ -689,7 +718,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(lbllogoInGame, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnInGameExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -865,6 +894,11 @@ public class MainFrame extends javax.swing.JFrame {
         lblMyPage1.setForeground(new java.awt.Color(51, 51, 255));
         lblMyPage1.setText("마이페이지");
         lblMyPage1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblMyPage1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblMyPage1MouseClicked(evt);
+            }
+        });
 
         lblMyPointWait.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
         lblMyPointWait.setText("포인트 : 0P");
@@ -961,8 +995,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Project HG");
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel10.setText("Project HG - WaitRoom");
         jLabel10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         lbllogoWaitRoom.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
@@ -978,7 +1012,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(lbllogoWaitRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnWaitRoomExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1222,8 +1256,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Project HG");
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel13.setText("Project HG - Lobby");
         jLabel13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         lbllogoSelectRoom.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
@@ -1239,7 +1273,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(lbllogoSelectRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSelectRoomExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1325,6 +1359,11 @@ public class MainFrame extends javax.swing.JFrame {
         lblMyPage2.setForeground(new java.awt.Color(51, 51, 255));
         lblMyPage2.setText("마이페이지");
         lblMyPage2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblMyPage2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblMyPage2MouseClicked(evt);
+            }
+        });
 
         lblPointSelect.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
         lblPointSelect.setText("포인트 : 0P");
@@ -1501,8 +1540,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel17.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel17.setText("Project HG");
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel17.setText("Create Room");
         jLabel17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         lbllogoCreate.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
@@ -1518,7 +1557,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(lbllogoCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCreateExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1603,6 +1642,223 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        MyPage.setUndecorated(true);
+
+        MyPageTitle.setBackground(new java.awt.Color(0, 0, 0));
+        MyPageTitle.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                MyPageTitleMouseDragged(evt);
+            }
+        });
+        MyPageTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                MyPageTitleMousePressed(evt);
+            }
+        });
+
+        btnMyPageExit.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        btnMyPageExit.setForeground(new java.awt.Color(255, 255, 255));
+        btnMyPageExit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnMyPageExit.setText("X");
+        btnMyPageExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMyPageExit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMyPageExit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMyPageExitMouseClicked(evt);
+            }
+        });
+
+        jLabel18.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel18.setText("Project HG - My Page");
+        jLabel18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        lbllogoMyPage.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lbllogoMyPage.setForeground(new java.awt.Color(255, 255, 255));
+        lbllogoMyPage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbllogoMyPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout MyPageTitleLayout = new javax.swing.GroupLayout(MyPageTitle);
+        MyPageTitle.setLayout(MyPageTitleLayout);
+        MyPageTitleLayout.setHorizontalGroup(
+            MyPageTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MyPageTitleLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(lbllogoMyPage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnMyPageExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        MyPageTitleLayout.setVerticalGroup(
+            MyPageTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lbllogoMyPage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(MyPageTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnMyPageExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        MyPageInfo.setBackground(new java.awt.Color(255, 255, 255));
+        MyPageInfo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        lblMyPageNick.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblMyPageNick.setText("닉네임");
+
+        lblMyPageLose.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblMyPageLose.setText("패배수");
+
+        lblMyPageWin.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblMyPageWin.setText("승리수");
+
+        lblMyPageDate.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblMyPageDate.setText("가입일");
+
+        lblMyPagePoint.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblMyPagePoint.setText("포인트");
+
+        lblMyPageId.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblMyPageId.setText("아이디");
+
+        lblMyPagePWD.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblMyPagePWD.setText("비밀번호체크");
+
+        lblMyPagePWDchk.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblMyPagePWDchk.setText("비밀번호");
+
+        txtMyPageWin.setEditable(false);
+        txtMyPageWin.setFont(new java.awt.Font("맑은 고딕", 0, 15)); // NOI18N
+        txtMyPageWin.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMyPageWin.setEnabled(false);
+
+        txtMyPageNick.setEditable(false);
+        txtMyPageNick.setFont(new java.awt.Font("맑은 고딕", 0, 15)); // NOI18N
+        txtMyPageNick.setEnabled(false);
+
+        txtMyPageDate.setEditable(false);
+        txtMyPageDate.setFont(new java.awt.Font("맑은 고딕", 0, 15)); // NOI18N
+        txtMyPageDate.setEnabled(false);
+
+        txtMyPagePoint.setEditable(false);
+        txtMyPagePoint.setFont(new java.awt.Font("맑은 고딕", 0, 15)); // NOI18N
+        txtMyPagePoint.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMyPagePoint.setEnabled(false);
+
+        txtMyPageLose.setEditable(false);
+        txtMyPageLose.setFont(new java.awt.Font("맑은 고딕", 0, 15)); // NOI18N
+        txtMyPageLose.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMyPageLose.setEnabled(false);
+
+        txtMyPageId.setEditable(false);
+        txtMyPageId.setFont(new java.awt.Font("맑은 고딕", 0, 15)); // NOI18N
+        txtMyPageId.setEnabled(false);
+
+        txtMyPagePWD.setFont(new java.awt.Font("맑은 고딕", 0, 15)); // NOI18N
+
+        txtMyPagePWDchk.setFont(new java.awt.Font("맑은 고딕", 0, 15)); // NOI18N
+        txtMyPagePWDchk.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtMyPagePWDchkKeyReleased(evt);
+            }
+        });
+
+        btnMyPageApply.setText("적용하기");
+        btnMyPageApply.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMyPageApplyActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout MyPageInfoLayout = new javax.swing.GroupLayout(MyPageInfo);
+        MyPageInfo.setLayout(MyPageInfoLayout);
+        MyPageInfoLayout.setHorizontalGroup(
+            MyPageInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MyPageInfoLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(MyPageInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnMyPageApply, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(MyPageInfoLayout.createSequentialGroup()
+                        .addGroup(MyPageInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtMyPageWin)
+                            .addComponent(lblMyPageWin))
+                        .addGap(60, 60, 60)
+                        .addGroup(MyPageInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(MyPageInfoLayout.createSequentialGroup()
+                                .addComponent(lblMyPageLose)
+                                .addGap(60, 60, 60)
+                                .addComponent(lblMyPagePoint))
+                            .addGroup(MyPageInfoLayout.createSequentialGroup()
+                                .addComponent(txtMyPageLose, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtMyPagePoint, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(lblMyPageId)
+                    .addComponent(lblMyPageNick)
+                    .addComponent(lblMyPageDate)
+                    .addComponent(lblMyPagePWDchk)
+                    .addComponent(lblMyPagePWD)
+                    .addComponent(txtMyPageDate)
+                    .addComponent(txtMyPageNick)
+                    .addComponent(txtMyPageId)
+                    .addComponent(txtMyPagePWD)
+                    .addComponent(txtMyPagePWDchk)
+                    .addComponent(lblPWDchkResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        MyPageInfoLayout.setVerticalGroup(
+            MyPageInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MyPageInfoLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(lblMyPageId)
+                .addGap(10, 10, 10)
+                .addComponent(txtMyPageId, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(lblMyPagePWDchk)
+                .addGap(10, 10, 10)
+                .addComponent(txtMyPagePWD, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(lblMyPagePWD)
+                .addGap(10, 10, 10)
+                .addComponent(txtMyPagePWDchk, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(lblPWDchkResult, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(lblMyPageNick)
+                .addGap(10, 10, 10)
+                .addComponent(txtMyPageNick, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(lblMyPageDate)
+                .addGap(10, 10, 10)
+                .addComponent(txtMyPageDate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(MyPageInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblMyPageWin)
+                    .addComponent(lblMyPageLose)
+                    .addComponent(lblMyPagePoint))
+                .addGap(10, 10, 10)
+                .addGroup(MyPageInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtMyPageWin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMyPagePoint, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMyPageLose, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(btnMyPageApply, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+        );
+
+        javax.swing.GroupLayout MyPageLayout = new javax.swing.GroupLayout(MyPage.getContentPane());
+        MyPage.getContentPane().setLayout(MyPageLayout);
+        MyPageLayout.setHorizontalGroup(
+            MyPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(MyPageTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(MyPageInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        MyPageLayout.setVerticalGroup(
+            MyPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MyPageLayout.createSequentialGroup()
+                .addComponent(MyPageTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(MyPageInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("할리갈리");
         setUndecorated(true);
@@ -1634,8 +1890,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Project HG");
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel9.setText("Project HG - Login");
         jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         lbllogoMain.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
@@ -1651,7 +1907,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(lbllogoMain, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnMainExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -2037,6 +2293,98 @@ public class MainFrame extends javax.swing.JFrame {
        client.sendMessage("ready");
     }//GEN-LAST:event_lblReadyMouseClicked
 
+    private void btnMyPageExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMyPageExitMouseClicked
+        MyPage.hide();
+    }//GEN-LAST:event_btnMyPageExitMouseClicked
+
+    private void MyPageTitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyPageTitleMouseDragged
+        // TODO add your handling code here:
+        MyPage.setLocation(evt.getXOnScreen()-xx , evt.getYOnScreen()-yy);
+    }//GEN-LAST:event_MyPageTitleMouseDragged
+
+    private void MyPageTitleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyPageTitleMousePressed
+        // TODO add your handling code here:
+        xx = evt.getX();
+        yy= evt.getY();
+    }//GEN-LAST:event_MyPageTitleMousePressed
+
+    private void txtMyPagePWDchkKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMyPagePWDchkKeyReleased
+        // TODO add your handling code here:
+        if(String.valueOf(txtMyPagePWDchk.getPassword()).equals("")){
+            lblPWDchkResult.setText("올바르지 않은 비밀번호입니다.");
+        }else{
+            if(String.valueOf(txtMyPagePWD.getPassword()).equals(String.valueOf(txtMyPagePWDchk.getPassword()))){
+                lblPWDchkResult.setText("사용 가능한 비밀번호입니다..");
+            }else{
+                lblPWDchkResult.setText("비밀번호가 올바르지 않습니다..");
+            }
+        }
+    }//GEN-LAST:event_txtMyPagePWDchkKeyReleased
+
+    private void btnMyPageApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyPageApplyActionPerformed
+        // TODO add your handling code here:
+        if(String.valueOf(txtMyPagePWDchk.getPassword()).equals("")){
+            showMessageDialog(null, "올바르지 않은 비밀번호 입니다.");
+            return;
+        }else{
+            if(!String.valueOf(txtMyPagePWD.getPassword()).equals(String.valueOf(txtMyPagePWDchk.getPassword()))){
+                showMessageDialog(null, "올바르지 않은 비밀번호 입니다.");
+                return;
+            }
+        }
+        UserDAO userDB = new UserDAO();
+        userDB.myPagePwdUpdate(userinfo.getId(), String.valueOf(txtMyPagePWD.getPassword()));
+        showMessageDialog(null, "비밀번호가 변경 되었습니다.");
+    }//GEN-LAST:event_btnMyPageApplyActionPerformed
+
+    private void lblMyPage1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMyPage1MouseClicked
+        // 로고 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("./image/settings.png"));
+        img = imgicon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        lbllogoMyPage.setIcon(new ImageIcon(img));
+        MyPage.setLocation(WaitRoom.getLocation().x, WaitRoom.getLocation().y);
+        MyPage.setSize(312,620);
+        MyPage.show();
+        txtMyPageId.setText(userinfo.getId());
+        txtMyPageNick.setText(userinfo.getNickname());
+        txtMyPageDate.setText(userinfo.getDate());
+        txtMyPageWin.setText(Integer.toString(userinfo.getWin()));
+        txtMyPageLose.setText(Integer.toString(userinfo.getLose()));
+        txtMyPagePoint.setText(Integer.toString(userinfo.getPoint()));
+    }//GEN-LAST:event_lblMyPage1MouseClicked
+
+    private void lblMyPage2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMyPage2MouseClicked
+        // 로고 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("./image/settings.png"));
+        img = imgicon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        lbllogoMyPage.setIcon(new ImageIcon(img));
+        MyPage.setLocation(SelectRoom.getLocation().x, SelectRoom.getLocation().y);
+        MyPage.setSize(312,620);
+        MyPage.show();
+        txtMyPageId.setText(userinfo.getId());
+        txtMyPageNick.setText(userinfo.getNickname());
+        txtMyPageDate.setText(userinfo.getDate());
+        txtMyPageWin.setText(Integer.toString(userinfo.getWin()));
+        txtMyPageLose.setText(Integer.toString(userinfo.getLose()));
+        txtMyPagePoint.setText(Integer.toString(userinfo.getPoint()));
+    }//GEN-LAST:event_lblMyPage2MouseClicked
+
+    private void lblMyPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMyPageMouseClicked
+        // 로고 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("./image/settings.png"));
+        img = imgicon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        lbllogoMyPage.setIcon(new ImageIcon(img));
+        MyPage.setLocation(InGame.getLocation().x, InGame.getLocation().y);
+        MyPage.setSize(312,620);
+        MyPage.show();
+        txtMyPageId.setText(userinfo.getId());
+        txtMyPageNick.setText(userinfo.getNickname());
+        txtMyPageDate.setText(userinfo.getDate());
+        txtMyPageWin.setText(Integer.toString(userinfo.getWin()));
+        txtMyPageLose.setText(Integer.toString(userinfo.getLose()));
+        txtMyPagePoint.setText(Integer.toString(userinfo.getPoint()));
+    }//GEN-LAST:event_lblMyPageMouseClicked
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -2286,6 +2634,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JFrame InGame;
     private javax.swing.JPanel InGameTitle;
     private javax.swing.JPanel MainTitle;
+    private javax.swing.JFrame MyPage;
+    private javax.swing.JPanel MyPageInfo;
+    private javax.swing.JPanel MyPageTitle;
     private javax.swing.JFrame SelectRoom;
     private javax.swing.JPanel SelectRoomTitle;
     private javax.swing.JFrame SignUp;
@@ -2301,6 +2652,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnJoin;
     private javax.swing.JButton btnLogin;
     private javax.swing.JLabel btnMainExit;
+    private javax.swing.JButton btnMyPageApply;
+    private javax.swing.JLabel btnMyPageExit;
     private javax.swing.JButton btnNicknameCheck;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JLabel btnSelectRoomExit;
@@ -2317,6 +2670,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -2361,6 +2715,14 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblMyPage;
     private javax.swing.JLabel lblMyPage1;
     private javax.swing.JLabel lblMyPage2;
+    private javax.swing.JLabel lblMyPageDate;
+    private javax.swing.JLabel lblMyPageId;
+    private javax.swing.JLabel lblMyPageLose;
+    private javax.swing.JLabel lblMyPageNick;
+    private javax.swing.JLabel lblMyPagePWD;
+    private javax.swing.JLabel lblMyPagePWDchk;
+    private javax.swing.JLabel lblMyPagePoint;
+    private javax.swing.JLabel lblMyPageWin;
     private javax.swing.JLabel lblMyPointInGame;
     private javax.swing.JLabel lblMyPointWait;
     private javax.swing.JLabel lblMyProfile;
@@ -2374,6 +2736,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblNickSelect;
     private javax.swing.JLabel lblPW;
     private javax.swing.JLabel lblPWCheck;
+    private javax.swing.JLabel lblPWDchkResult;
     private javax.swing.JLabel lblPWResult;
     private javax.swing.JLabel lblPoint1;
     private javax.swing.JLabel lblPoint2;
@@ -2398,6 +2761,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lbllogoCreate;
     private javax.swing.JLabel lbllogoInGame;
     private javax.swing.JLabel lbllogoMain;
+    private javax.swing.JLabel lbllogoMyPage;
     private javax.swing.JLabel lbllogoSelectRoom;
     private javax.swing.JLabel lbllogoSignUp;
     private javax.swing.JLabel lbllogoWaitRoom;
@@ -2409,6 +2773,14 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtCreateRoom;
     private javax.swing.JTextField txtLoginID;
     private javax.swing.JPasswordField txtLoginPW;
+    private javax.swing.JTextField txtMyPageDate;
+    private javax.swing.JTextField txtMyPageId;
+    private javax.swing.JTextField txtMyPageLose;
+    private javax.swing.JTextField txtMyPageNick;
+    private javax.swing.JPasswordField txtMyPagePWD;
+    private javax.swing.JPasswordField txtMyPagePWDchk;
+    private javax.swing.JTextField txtMyPagePoint;
+    private javax.swing.JTextField txtMyPageWin;
     private javax.swing.JPasswordField txtPW;
     private javax.swing.JPasswordField txtPWCheck;
     private javax.swing.JTextField txtSignUpID;
