@@ -96,6 +96,7 @@ public class MainFrame extends javax.swing.JFrame {
             lblPoint2.setText("포인트 : "+tmpData.getPoint()+"P");
             lblwl2.setText(tmpData.getWin()+"승 "+tmpData.getLose()+"패");
         }
+        userDB.close();
     }
     
     public void ExitInGame(){
@@ -2129,6 +2130,7 @@ public class MainFrame extends javax.swing.JFrame {
             }else{
                 showMessageDialog(null, "사용 가능한 아이디입니다.");
             }
+            userDB.close();
         }
     }//GEN-LAST:event_btnIDcheckActionPerformed
 
@@ -2155,6 +2157,7 @@ public class MainFrame extends javax.swing.JFrame {
             }else{
                 showMessageDialog(null, "사용 가능한 닉네임입니다.");
             }
+            userDB.close();
         }
     }//GEN-LAST:event_btnNicknameCheckActionPerformed
 
@@ -2180,6 +2183,7 @@ public class MainFrame extends javax.swing.JFrame {
         userDB.singUpInsert(txtSignUpID.getText(), String.valueOf(txtPW.getPassword()), txtSignUpNickname.getText());
         showMessageDialog(null, "가입이 완료되었습니다.");
         SignUp.hide();
+        userDB.close();
     }//GEN-LAST:event_btnSignUpActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -2199,6 +2203,7 @@ public class MainFrame extends javax.swing.JFrame {
         }else{
             showMessageDialog(null, "아이디 또는 비밀번호가 올바르지 않습니다.");
         }
+        userDB.close();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnSelectRoomExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelectRoomExitMouseClicked
@@ -2332,6 +2337,7 @@ public class MainFrame extends javax.swing.JFrame {
         UserDAO userDB = new UserDAO();
         userDB.myPagePwdUpdate(userinfo.getId(), String.valueOf(txtMyPagePWD.getPassword()));
         showMessageDialog(null, "비밀번호가 변경 되었습니다.");
+        userDB.close();
     }//GEN-LAST:event_btnMyPageApplyActionPerformed
 
     private void lblMyPage1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMyPage1MouseClicked

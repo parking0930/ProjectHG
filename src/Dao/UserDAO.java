@@ -25,6 +25,15 @@ public class UserDAO {
         }
     }
     
+    public void close(){
+        try{
+            pstmt.close();
+            conn.close();
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
     // ID, PW 받아서 맞으면 True 틀리면 false 반환
     public boolean login(String id, String pwd) {
         String sql = "select password from member where id = ?";
@@ -34,8 +43,10 @@ public class UserDAO {
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 if (rs.getString(1).equals(pwd)) {
+                    rs.close();
                     return true;
                 } else {
+                    rs.close();
                     return false;
                 }
             }
@@ -61,7 +72,7 @@ public class UserDAO {
             userinfo.setLose(rs.getInt(4));
             userinfo.setPoint(rs.getInt(5));
             userinfo.setDate(rs.getString(6).split(" ")[0]);
-            
+            rs.close();
             return userinfo;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -76,8 +87,10 @@ public class UserDAO {
             rs = pstmt.executeQuery();
             
             if(rs.next()){
+                rs.close();
                 return true;
             }else{
+                rs.close();
                 return false;
             }
         } catch (SQLException e) {
@@ -93,8 +106,10 @@ public class UserDAO {
             rs = pstmt.executeQuery();
             
             if(rs.next()){
+                rs.close();
                 return true;
             }else{
+                rs.close();
                 return false;
             }
         } catch (SQLException e) {
