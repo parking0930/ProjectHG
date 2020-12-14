@@ -110,6 +110,20 @@ public class ClientBackground {
                         main.userSet(a[1],a[2]);
                     }else if(a[0].equals("exitInGame")){
                         main.ExitInGame();
+                    }else if(a[0].equals("GameStart")){
+                        main.initialGameSet(a[1],a[2],a[3]);
+                    }else if(a[0].equals("receiveyourcard")){
+                        main.receiveCard();
+                    }else if(a[0].equals("nextTurn")){
+                        main.TurnChange();
+                    }else if(a[0].equals("getAllCard")){
+                        main.getAllCard();
+                    }else if(a[0].equals("LoseAllCard")){
+                        main.loseAllCard();
+                    }else if(a[0].equals("givemycard")){
+                        main.giveMycard();
+                    }else if(a[0].equals("getyourcard")){
+                        main.getYourcard();
                     }else{
                         for(int i=0; i<(a.length-4)/4; i++){
                             gui.setValueAt(a[4+(i*4)], i, 0);

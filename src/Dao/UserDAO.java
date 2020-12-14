@@ -146,4 +146,27 @@ public class UserDAO {
             System.out.println(e.getMessage());
         }
     }
+    public void winUpdate(String id){
+        String sql = "update member set point=point+100, win=win+1 where id = ?";
+        
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void loseUpdate(String id){
+        String sql = "update member set point=point+50, lose=lose+1 where id = ?";
+        
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

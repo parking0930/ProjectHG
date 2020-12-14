@@ -7,6 +7,7 @@ import Dto.UserDTO;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.ImageIcon;
@@ -20,12 +21,21 @@ public class MainFrame extends javax.swing.JFrame {
     public static ClientBackground client;
     public static UserDTO userinfo; // 유저 정보
     public static Timer turnTimer = new Timer(); // 인게임 턴용 타이머
-    public static Timer AllTimer = new Timer(); // 인게임 전체 제한 시간 타이머
+    public static Timer allTimer = new Timer(); // 인게임 전체 제한 시간 타이머
     public static TimerTask turnTask; // 턴용 타이머테스크
     public static TimerTask allTask; // 제한 시간용 타이머테스크
     public static int turnCount; // 턴용 타이머 카운트
     public static int allCount; // 제한 시간용 타이머 카운트
     public static String whoseTurn;
+    public static ArrayList<String> mycards;
+    public static ArrayList<String> yourcards;
+    public static ArrayList<String> cardlist; // 놓여진 카드 목록
+    public static int startState = 0;
+    public static UserDTO myinfo;
+    public static UserDTO yourinfo;
+    public static int bellState = 0;
+    public static String lastMyCard;
+    public static String lastYourCard;
     ImageIcon imgicon;
     Image img;
     int xx; // 이전 x좌표 기억
@@ -39,7 +49,6 @@ public class MainFrame extends javax.swing.JFrame {
         imgicon = new ImageIcon(MainFrame.class.getResource("../image/settings.png"));
         img = imgicon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         lbllogoMain.setIcon(new ImageIcon(img));
-        //openGame();
     }
 
     public void Ready(String r1, String r2){
@@ -64,13 +73,22 @@ public class MainFrame extends javax.swing.JFrame {
         if(r1.equals("1")&&r2.equals("1")){ // 둘 다 준비 상태면..
             InGame.setLocation(WaitRoom.getLocation().x, WaitRoom.getLocation().y);
             openGame();
+            WaitRoom.hide();
         }
     }
 
     public void userSet(String u1, String u2){
+        client.sendMessage("f5");
         // 나의 프로필 이미지
         UserDAO userDB = new UserDAO();
         UserDTO tmpData;
+        if(userinfo.getId().equals(u1)){
+            myinfo = userDB.getUserData(u1);
+            yourinfo = userDB.getUserData(u2);
+        }else{
+            myinfo = userDB.getUserData(u2);
+            yourinfo = userDB.getUserData(u1);
+        }
         System.out.println(u1+"@"+u2);
         if(!u1.equals("X")){
             imgicon = new ImageIcon(MainFrame.class.getResource("../image/profile.png"));
@@ -112,9 +130,9 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         pnlYour = new javax.swing.JPanel();
         lblYourProfile = new javax.swing.JLabel();
-        lblYourNickname1 = new javax.swing.JLabel();
+        lblYourNickname = new javax.swing.JLabel();
         lblMyNickname2 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lblYourCard = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         lblRed = new javax.swing.JLabel();
         lblRedClick = new javax.swing.JLabel();
@@ -126,7 +144,7 @@ public class MainFrame extends javax.swing.JFrame {
         lblMyProfile = new javax.swing.JLabel();
         lblMyNickname = new javax.swing.JLabel();
         lblMyNickname1 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblMyCard = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -251,6 +269,22 @@ public class MainFrame extends javax.swing.JFrame {
         txtMyPagePWDchk = new javax.swing.JPasswordField();
         btnMyPageApply = new javax.swing.JButton();
         lblPWDchkResult = new javax.swing.JLabel();
+        Winner = new javax.swing.JDialog();
+        WinnerTitle = new javax.swing.JPanel();
+        jLabel19 = new javax.swing.JLabel();
+        lbllogoWinner = new javax.swing.JLabel();
+        jPanel20 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        btnWinnerOK = new javax.swing.JButton();
+        Loser = new javax.swing.JDialog();
+        LoserTitle = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        lbllogoLoser = new javax.swing.JLabel();
+        jPanel21 = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        btnLoserOK = new javax.swing.JButton();
         MainTitle = new javax.swing.JPanel();
         btnMainExit = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -274,14 +308,14 @@ public class MainFrame extends javax.swing.JFrame {
         pnlYour.setBackground(new java.awt.Color(255, 255, 255));
         pnlYour.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
-        lblYourNickname1.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
-        lblYourNickname1.setText("닉네임");
+        lblYourNickname.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lblYourNickname.setText("닉네임");
 
         lblMyNickname2.setFont(new java.awt.Font("맑은 고딕", 1, 16)); // NOI18N
         lblMyNickname2.setText("남은 카드 : ");
 
-        jLabel7.setFont(new java.awt.Font("맑은 고딕", 0, 18)); // NOI18N
-        jLabel7.setText("0");
+        lblYourCard.setFont(new java.awt.Font("맑은 고딕", 0, 18)); // NOI18N
+        lblYourCard.setText("0");
 
         javax.swing.GroupLayout pnlYourLayout = new javax.swing.GroupLayout(pnlYour);
         pnlYour.setLayout(pnlYourLayout);
@@ -292,11 +326,11 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(lblYourProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(pnlYourLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblYourNickname1)
+                    .addComponent(lblYourNickname)
                     .addGroup(pnlYourLayout.createSequentialGroup()
                         .addComponent(lblMyNickname2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel7)))
+                        .addComponent(lblYourCard)))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         pnlYourLayout.setVerticalGroup(
@@ -307,11 +341,11 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(12, 12, 12))
             .addGroup(pnlYourLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(lblYourNickname1)
+                .addComponent(lblYourNickname)
                 .addGap(18, 18, 18)
                 .addGroup(pnlYourLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblMyNickname2)
-                    .addComponent(jLabel7))
+                    .addComponent(lblYourCard))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -344,6 +378,11 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         lblBell.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblBell.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBellMouseClicked(evt);
+            }
+        });
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
@@ -351,6 +390,11 @@ public class MainFrame extends javax.swing.JFrame {
         lblBlueClick.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         lblBlue.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblBlue.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBlueMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -382,8 +426,8 @@ public class MainFrame extends javax.swing.JFrame {
         lblMyNickname1.setFont(new java.awt.Font("맑은 고딕", 1, 16)); // NOI18N
         lblMyNickname1.setText("남은 카드 : ");
 
-        jLabel6.setFont(new java.awt.Font("맑은 고딕", 0, 18)); // NOI18N
-        jLabel6.setText("0");
+        lblMyCard.setFont(new java.awt.Font("맑은 고딕", 0, 18)); // NOI18N
+        lblMyCard.setText("0");
 
         javax.swing.GroupLayout pnlMyLayout = new javax.swing.GroupLayout(pnlMy);
         pnlMy.setLayout(pnlMyLayout);
@@ -398,7 +442,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(pnlMyLayout.createSequentialGroup()
                         .addComponent(lblMyNickname1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel6)))
+                        .addComponent(lblMyCard)))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         pnlMyLayout.setVerticalGroup(
@@ -413,7 +457,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlMyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblMyNickname1)
-                    .addComponent(jLabel6))
+                    .addComponent(lblMyCard))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1480,7 +1524,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(lblSelectRoomExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addGap(14, 14, 14))))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1863,6 +1907,206 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(MyPageInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        Winner.setModal(true);
+        Winner.setUndecorated(true);
+
+        WinnerTitle.setBackground(new java.awt.Color(0, 0, 0));
+        WinnerTitle.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                WinnerTitleMouseDragged(evt);
+            }
+        });
+        WinnerTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                WinnerTitleMousePressed(evt);
+            }
+        });
+
+        jLabel19.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel19.setText("Project HG");
+        jLabel19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        lbllogoWinner.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lbllogoWinner.setForeground(new java.awt.Color(255, 255, 255));
+        lbllogoWinner.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbllogoWinner.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout WinnerTitleLayout = new javax.swing.GroupLayout(WinnerTitle);
+        WinnerTitle.setLayout(WinnerTitleLayout);
+        WinnerTitleLayout.setHorizontalGroup(
+            WinnerTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, WinnerTitleLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(lbllogoWinner, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        WinnerTitleLayout.setVerticalGroup(
+            WinnerTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lbllogoWinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        jPanel20.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel20.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel6.setFont(new java.awt.Font("맑은 고딕", 1, 48)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("You Win!");
+
+        jLabel7.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("게임에서 승리하여 100포인트가 지급되었습니다.");
+
+        btnWinnerOK.setFont(new java.awt.Font("맑은 고딕", 1, 24)); // NOI18N
+        btnWinnerOK.setText("확인");
+        btnWinnerOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnWinnerOKActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
+        jPanel20.setLayout(jPanel20Layout);
+        jPanel20Layout.setHorizontalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(btnWinnerOK, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48))
+        );
+        jPanel20Layout.setVerticalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel20Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addComponent(btnWinnerOK, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel7)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout WinnerLayout = new javax.swing.GroupLayout(Winner.getContentPane());
+        Winner.getContentPane().setLayout(WinnerLayout);
+        WinnerLayout.setHorizontalGroup(
+            WinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(WinnerTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        WinnerLayout.setVerticalGroup(
+            WinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(WinnerLayout.createSequentialGroup()
+                .addComponent(WinnerTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        Loser.setModal(true);
+        Loser.setUndecorated(true);
+
+        LoserTitle.setBackground(new java.awt.Color(0, 0, 0));
+        LoserTitle.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                LoserTitleMouseDragged(evt);
+            }
+        });
+        LoserTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                LoserTitleMousePressed(evt);
+            }
+        });
+
+        jLabel20.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel20.setText("Project HG");
+        jLabel20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        lbllogoLoser.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        lbllogoLoser.setForeground(new java.awt.Color(255, 255, 255));
+        lbllogoLoser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbllogoLoser.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout LoserTitleLayout = new javax.swing.GroupLayout(LoserTitle);
+        LoserTitle.setLayout(LoserTitleLayout);
+        LoserTitleLayout.setHorizontalGroup(
+            LoserTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LoserTitleLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(lbllogoLoser, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        LoserTitleLayout.setVerticalGroup(
+            LoserTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lbllogoLoser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        jPanel21.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel21.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel21.setFont(new java.awt.Font("맑은 고딕", 1, 48)); // NOI18N
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel21.setText("You Lose...");
+
+        jLabel22.setFont(new java.awt.Font("맑은 고딕", 1, 18)); // NOI18N
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("게임에서 패배하여 50포인트가 지급되었습니다.");
+
+        btnLoserOK.setFont(new java.awt.Font("맑은 고딕", 1, 24)); // NOI18N
+        btnLoserOK.setText("확인");
+        btnLoserOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoserOKActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
+        jPanel21.setLayout(jPanel21Layout);
+        jPanel21Layout.setHorizontalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(btnLoserOK, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48))
+        );
+        jPanel21Layout.setVerticalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel21Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel21)
+                .addGap(18, 18, 18)
+                .addComponent(btnLoserOK, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel22)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout LoserLayout = new javax.swing.GroupLayout(Loser.getContentPane());
+        Loser.getContentPane().setLayout(LoserLayout);
+        LoserLayout.setHorizontalGroup(
+            LoserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(LoserTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        LoserLayout.setVerticalGroup(
+            LoserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(LoserLayout.createSequentialGroup()
+                .addComponent(LoserTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("할리갈리");
         setUndecorated(true);
@@ -2200,6 +2444,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             MainFrame.this.hide();
             showSelectRoom();
+            client.sendMessage("f5");
         }else{
             showMessageDialog(null, "아이디 또는 비밀번호가 올바르지 않습니다.");
         }
@@ -2234,7 +2479,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_lblSelectRoomExitMouseClicked
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        //server.sendMessage("f5");
         client.sendMessage("f5");
     }//GEN-LAST:event_btnRefreshActionPerformed
 
@@ -2243,7 +2487,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateRoomActionPerformed
 
     private void btnCreateExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCreateExitMouseClicked
-        // TODO add your handling code here:
+        CreateRoom.hide();
     }//GEN-LAST:event_btnCreateExitMouseClicked
 
     private void CreateTitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CreateTitleMouseDragged
@@ -2388,6 +2632,68 @@ public class MainFrame extends javax.swing.JFrame {
         txtMyPagePoint.setText(Integer.toString(userinfo.getPoint()));
     }//GEN-LAST:event_lblMyPageMouseClicked
 
+    private void lblBlueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBlueMouseClicked
+        if(whoseTurn.equals("my")&&bellState==1){
+            lastMyCard = mycards.get(mycards.size()-1);
+            cardlist.add(lastMyCard);
+            // 오른쪽 내(파랑)가 클릭한 카드
+            imgicon = new ImageIcon(MainFrame.class.getResource("../image/cards/"+lastMyCard+".png"));
+            img = imgicon.getImage().getScaledInstance(lblBlueClick.getWidth(), lblBlueClick.getHeight(), Image.SCALE_SMOOTH);
+            lblBlueClick.setIcon(new ImageIcon(img));
+            mycards.remove(mycards.size()-1);
+            refreshCardNum();
+            client.sendMessage("sendmycard");
+        }
+    }//GEN-LAST:event_lblBlueMouseClicked
+
+    private void lblBellMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBellMouseClicked
+        if(bellState==0){
+            client.sendMessage("bellClick,"+lastMyCard+"#"+lastYourCard);
+        }
+    }//GEN-LAST:event_lblBellMouseClicked
+
+    private void WinnerTitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_WinnerTitleMouseDragged
+        Winner.setLocation(evt.getXOnScreen()-xx , evt.getYOnScreen()-yy);
+    }//GEN-LAST:event_WinnerTitleMouseDragged
+
+    private void WinnerTitleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_WinnerTitleMousePressed
+        xx = evt.getX();
+        yy= evt.getY();
+    }//GEN-LAST:event_WinnerTitleMousePressed
+
+    private void LoserTitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoserTitleMouseDragged
+        Loser.setLocation(evt.getXOnScreen()-xx , evt.getYOnScreen()-yy);
+    }//GEN-LAST:event_LoserTitleMouseDragged
+
+    private void LoserTitleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoserTitleMousePressed
+        xx = evt.getX();
+        yy= evt.getY();
+    }//GEN-LAST:event_LoserTitleMousePressed
+
+    private void btnWinnerOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWinnerOKActionPerformed
+        UserDAO user = new UserDAO();
+        user.winUpdate(userinfo.getId());
+        userinfo = user.getUserData(userinfo.getId());
+        user.close();
+        Winner.hide();
+        WaitRoom.setLocation(InGame.getLocation().x, InGame.getLocation().y);
+        InGame.hide();
+        showWaitRoom();
+        Ready("0", "0");
+    }//GEN-LAST:event_btnWinnerOKActionPerformed
+
+    private void btnLoserOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoserOKActionPerformed
+        UserDAO user = new UserDAO();
+        user.loseUpdate(userinfo.getId());
+        userinfo = user.getUserData(userinfo.getId());
+        user.close();
+        Loser.hide();
+        WaitRoom.setLocation(InGame.getLocation().x, InGame.getLocation().y);
+        InGame.hide();
+        showWaitRoom();
+        Ready("0", "0");
+    }//GEN-LAST:event_btnLoserOKActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -2420,7 +2726,25 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
     }
-    
+    /////////////////////////////////////////////////////Pop Up////////////////////////////////////////////////////
+    public void showWinner(){
+        Winner.setSize(467, 258);
+        Winner.setLocation(InGame.getLocation().x+InGame.getWidth()/2, InGame.getLocation().y+InGame.getHeight()/2);
+        Winner.show();
+        // 로고 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/settings.png"));
+        img = imgicon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        lbllogoWinner.setIcon(new ImageIcon(img));
+    }
+    public void showLoser(){
+        Loser.setSize(467, 258);
+        Loser.setLocation(InGame.getLocation().x+InGame.getWidth()/2, InGame.getLocation().y+InGame.getHeight()/2);
+        Loser.show();
+        // 로고 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/settings.png"));
+        img = imgicon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        lbllogoWinner.setIcon(new ImageIcon(img));
+    }
     /////////////////////////////////////////////////////Sign Up////////////////////////////////////////////////////
     public void showSignUp(){
         SignUp.setSize(555, 592);
@@ -2434,7 +2758,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
     ///////////////////////////////////////////////////Select Room///////////////////////////////////////////////////
     public void showSelectRoom(){
-        SelectRoom.setSize(947, 515);
+        SelectRoom.setSize(947, 534);
         //SelectRoom.setLocation(MainFrame.this.getLocation().x, MainFrame.this.getLocation().y);
         SelectRoom.setResizable(false);
         SelectRoom.show();
@@ -2577,11 +2901,201 @@ public class MainFrame extends javax.swing.JFrame {
         lblMyNickInGame.setText(userinfo.getNickname());
         lblMyPointInGame.setText("포인트 : "+userinfo.getPoint()+"P");
         lblMyWinLoseInGame.setText(userinfo.getWin()+"승 "+userinfo.getLose()+"패");
+        
+        lblMyNickname.setText(myinfo.getNickname());
+        lblYourNickname.setText(yourinfo.getNickname());
     }
     
+    public void initialGameSet(String turn, String mycard, String yourcard){
+        mycards = new ArrayList<String>();
+        yourcards = new ArrayList<String>();
+        cardlist = new ArrayList<String>();
+        whoseTurn = turn;
+        String[] mytmp = mycard.substring(1, mycard.length()-1).split("#");
+        String[] yourtmp = yourcard.substring(1, yourcard.length()-1).split("#");
+        for(int i=0; i<mytmp.length;i++){
+            mycards.add(mytmp[i].trim());
+            yourcards.add(yourtmp[i].trim());
+        }
+        System.out.println(mycards.toString());
+        System.out.println(yourcards.toString());
+        startState = 1;
+        bellState = 0;
+        lastMyCard = "00";//empty card
+        lastYourCard = "00";//empty card
+        allTimer = new Timer();
+        turnTimer = new Timer();
+        AllTimer();
+        TurnChange();
+    }
     
+    public void TurnChange(){
+        if(startState==1){ // 첫 턴이면
+            startState = 0;
+            if(whoseTurn.equals("my")){
+                showMyturn();
+            }else if(whoseTurn.equals("your")){
+                showYourturn();
+            }
+        }else{
+            turnTimer.cancel();
+            turnTimer = new Timer();
+            if(bellState==1){
+                showBellturn();
+                return;
+            }
+            if(whoseTurn.equals("my")){
+                if(yourcards.size()==0){
+                    showWinner();
+                    turnTimer.cancel();
+                    allTimer.cancel();
+                    return;
+                }
+                whoseTurn = "your";
+                showYourturn();
+            }else if(whoseTurn.equals("your")){
+                if(mycards.size()==0){
+                    showLoser();
+                    turnTimer.cancel();
+                    allTimer.cancel();
+                    return;
+                }
+                whoseTurn = "my";
+                showMyturn();
+            }
+        }
+    }
     
-    public void GameStart(){
+    public void showMyturn(){
+        bellState = 1;
+        TurnTimer(myinfo.getNickname()+"님의 턴입니다.", 10);
+        LineBorder lb = new LineBorder(Color.RED, 2, true);
+        pnlMy.setBorder(lb);
+        lb = new LineBorder(Color.BLACK, 2, true);
+        pnlYour.setBorder(lb);
+        //lblBlue
+        // 오른쪽 내(파랑) 카드 세팅
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/cards/blueb2.png"));
+        img = imgicon.getImage().getScaledInstance(lblBlue.getWidth(), lblBlue.getHeight(), Image.SCALE_SMOOTH);
+        lblBlue.setIcon(new ImageIcon(img));
+        lblBlue.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        // 벨 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/bell.png"));
+        img = imgicon.getImage().getScaledInstance(lblBell.getWidth(), lblBell.getHeight(), Image.SCALE_SMOOTH);
+        lblBell.setIcon(new ImageIcon(img));
+        lblBell.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }
+    
+    public void showYourturn(){
+        bellState = 1;
+        TurnTimer(yourinfo.getNickname()+"님의 턴입니다.", 10);
+        LineBorder lb = new LineBorder(Color.RED, 2, true);
+        pnlYour.setBorder(lb);
+        lb = new LineBorder(Color.BLACK, 2, true);
+        pnlMy.setBorder(lb);
+        // 오른쪽 내(파랑) 카드 세팅
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/cards/blueb.png"));
+        img = imgicon.getImage().getScaledInstance(lblBlue.getWidth(), lblBlue.getHeight(), Image.SCALE_SMOOTH);
+        lblBlue.setIcon(new ImageIcon(img));
+        lblBlue.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        // 벨 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/bell.png"));
+        img = imgicon.getImage().getScaledInstance(lblBell.getWidth(), lblBell.getHeight(), Image.SCALE_SMOOTH);
+        lblBell.setIcon(new ImageIcon(img));
+        lblBell.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }
+    
+    public void showBellturn(){
+        bellState = 0;
+        TurnTimer("종을 칠 수 있습니다.", 3);
+        LineBorder lb = new LineBorder(Color.BLACK, 2, true);
+        pnlMy.setBorder(lb);
+        pnlYour.setBorder(lb);
+        // 오른쪽 내(파랑) 카드 세팅
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/cards/blueb.png"));
+        img = imgicon.getImage().getScaledInstance(lblBlue.getWidth(), lblBlue.getHeight(), Image.SCALE_SMOOTH);
+        lblBlue.setIcon(new ImageIcon(img));
+        lblBlue.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        // 벨 이미지
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/bell2.png"));
+        img = imgicon.getImage().getScaledInstance(lblBell.getWidth(), lblBell.getHeight(), Image.SCALE_SMOOTH);
+        lblBell.setIcon(new ImageIcon(img));
+        lblBell.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    }
+    
+    public void receiveCard(){
+        lastYourCard = yourcards.get(yourcards.size()-1);
+        cardlist.add(lastYourCard);
+        // 왼쪽 상대(빨강)가 클릭한 카드
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/cards/"+lastYourCard+".png"));
+        img = imgicon.getImage().getScaledInstance(lblRedClick.getWidth(), lblRedClick.getHeight(), Image.SCALE_SMOOTH);
+        lblRedClick.setIcon(new ImageIcon(img));
+        yourcards.remove(yourcards.size()-1);
+        refreshCardNum();
+    }
+    
+    public void refreshCardNum(){
+        lblMyCard.setText(Integer.toString(mycards.size()));
+        lblYourCard.setText(Integer.toString(yourcards.size()));
+    }
+     
+    public void getAllCard(){
+        for(int i=0;i<cardlist.size();i++){
+            mycards.add(cardlist.get(i));
+        }
+        cardlist.clear();
+        lastMyCard = "00";//empty card
+        lastYourCard = "00";//empty card
+        // 오른쪽 내(파랑)가 클릭한 카드
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/emptycard.png"));
+        img = imgicon.getImage().getScaledInstance(lblBlueClick.getWidth(), lblBlueClick.getHeight(), Image.SCALE_SMOOTH);
+        lblBlueClick.setIcon(new ImageIcon(img));
+        // 왼쪽 상대(빨강)가 클릭한 카드
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/emptycard.png"));
+        img = imgicon.getImage().getScaledInstance(lblRedClick.getWidth(), lblRedClick.getHeight(), Image.SCALE_SMOOTH);
+        lblRedClick.setIcon(new ImageIcon(img));
+        refreshCardNum();
+        TurnChange();
+    }
+    
+    public void loseAllCard(){
+        for(int i=0;i<cardlist.size();i++){
+            yourcards.add(cardlist.get(i));
+        }
+        cardlist.clear();
+        lastMyCard = "00";//empty card
+        lastYourCard = "00";//empty card
+        // 오른쪽 내(파랑)가 클릭한 카드
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/emptycard.png"));
+        img = imgicon.getImage().getScaledInstance(lblBlueClick.getWidth(), lblBlueClick.getHeight(), Image.SCALE_SMOOTH);
+        lblBlueClick.setIcon(new ImageIcon(img));
+        // 왼쪽 상대(빨강)가 클릭한 카드
+        imgicon = new ImageIcon(MainFrame.class.getResource("../image/emptycard.png"));
+        img = imgicon.getImage().getScaledInstance(lblRedClick.getWidth(), lblRedClick.getHeight(), Image.SCALE_SMOOTH);
+        lblRedClick.setIcon(new ImageIcon(img));
+        refreshCardNum();
+        TurnChange();
+    }
+    
+    public void giveMycard(){
+        if(mycards.size()>0){
+            yourcards.add(mycards.get(mycards.size()-1));
+            mycards.remove(mycards.size()-1);
+        }
+        refreshCardNum();
+        TurnChange();
+    }
+    
+    public void getYourcard(){
+        if(yourcards.size()>0){
+            mycards.add(yourcards.get(yourcards.size()-1));
+            yourcards.remove(yourcards.size()-1);
+        }
+        refreshCardNum();
+        TurnChange();
+    }
+    
+    public void AllTimer(){
         allCount = 1200;
         allTask = new TimerTask(){
             @Override
@@ -2591,39 +3105,12 @@ public class MainFrame extends javax.swing.JFrame {
                     int sec = allCount % 60;
                     lblAllCount.setText(minute+"분 "+sec+"초");
                     allCount--;
-                }else{AllTimer.cancel();}
+                }else{
+                    allTimer.cancel();
+                }
             }
         };
-        AllTimer.schedule(allTask, 0, 1000);
-    }
-    
-    public void TurnChange(){
-        if(whoseTurn.equals("my")){
-            whoseTurn = "your";
-            
-        }else if(whoseTurn.equals("your")){
-            
-        }
-    }
-    
-    public void showMyturn(){
-        LineBorder lb = new LineBorder(Color.RED, 2, true);
-        pnlMy.setBorder(lb);
-        lb = new LineBorder(Color.BLACK, 2, true);
-        pnlYour.setBorder(lb);
-    }
-    
-    public void showYourturn(){
-        LineBorder lb = new LineBorder(Color.RED, 2, true);
-        pnlYour.setBorder(lb);
-        lb = new LineBorder(Color.BLACK, 2, true);
-        pnlMy.setBorder(lb);
-    }
-    
-    public void showBellturn(){
-        LineBorder lb = new LineBorder(Color.BLACK, 2, true);
-        pnlMy.setBorder(lb);
-        pnlYour.setBorder(lb);
+        allTimer.schedule(allTask, 0, 1000);
     }
     
     public void TurnTimer(String nickname, int count){
@@ -2635,7 +3122,23 @@ public class MainFrame extends javax.swing.JFrame {
                 if(turnCount >= 0){
                     lblTurnCount.setText(turnCount+"초 남았습니다.");
                     turnCount--;
-                }else{turnTimer.cancel();}
+                }else{
+                    if(bellState==0){// 벨 턴이면
+                        client.sendMessage("BellNotClick");
+                    }else if(whoseTurn.equals("my")){
+                        if(whoseTurn.equals("my")&&bellState==1){
+                            lastMyCard = mycards.get(mycards.size()-1);
+                            cardlist.add(lastMyCard);
+                            // 오른쪽 내(파랑)가 클릭한 카드
+                            imgicon = new ImageIcon(MainFrame.class.getResource("../image/cards/"+lastMyCard+".png"));
+                            img = imgicon.getImage().getScaledInstance(lblBlueClick.getWidth(), lblBlueClick.getHeight(), Image.SCALE_SMOOTH);
+                            lblBlueClick.setIcon(new ImageIcon(img));
+                            mycards.remove(mycards.size()-1);
+                            refreshCardNum();
+                            client.sendMessage("sendmycard");
+                        }
+                    }
+                }
             }
         };
         turnTimer.schedule(turnTask, 0, 1000);
@@ -2647,6 +3150,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel CreateTitle;
     private javax.swing.JFrame InGame;
     private javax.swing.JPanel InGameTitle;
+    private javax.swing.JDialog Loser;
+    private javax.swing.JPanel LoserTitle;
     private javax.swing.JPanel MainTitle;
     private javax.swing.JFrame MyPage;
     private javax.swing.JPanel MyPageInfo;
@@ -2657,6 +3162,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel SignUpTitle;
     private javax.swing.JFrame WaitRoom;
     private javax.swing.JPanel WaitRoomTitle;
+    private javax.swing.JDialog Winner;
+    private javax.swing.JPanel WinnerTitle;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCreate;
     private javax.swing.JLabel btnCreateExit;
@@ -2665,6 +3172,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel btnInGameExit;
     private javax.swing.JButton btnJoin;
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnLoserOK;
     private javax.swing.JLabel btnMainExit;
     private javax.swing.JButton btnMyPageApply;
     private javax.swing.JLabel btnMyPageExit;
@@ -2674,6 +3182,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnSignUp;
     private javax.swing.JLabel btnSignUpExit;
     private javax.swing.JLabel btnWaitRoomExit;
+    private javax.swing.JButton btnWinnerOK;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2685,7 +3194,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -2705,6 +3218,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -2721,6 +3236,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblBlue;
     private javax.swing.JLabel lblBlueClick;
     private javax.swing.JLabel lblExit;
+    private javax.swing.JLabel lblMyCard;
     private javax.swing.JLabel lblMyNickInGame;
     private javax.swing.JLabel lblMyNickWait;
     private javax.swing.JLabel lblMyNickname;
@@ -2770,15 +3286,18 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblState2;
     private javax.swing.JLabel lblTurnCount;
     private javax.swing.JLabel lblTurnName;
-    private javax.swing.JLabel lblYourNickname1;
+    private javax.swing.JLabel lblYourCard;
+    private javax.swing.JLabel lblYourNickname;
     private javax.swing.JLabel lblYourProfile;
     private javax.swing.JLabel lbllogoCreate;
     private javax.swing.JLabel lbllogoInGame;
+    private javax.swing.JLabel lbllogoLoser;
     private javax.swing.JLabel lbllogoMain;
     private javax.swing.JLabel lbllogoMyPage;
     private javax.swing.JLabel lbllogoSelectRoom;
     private javax.swing.JLabel lbllogoSignUp;
     private javax.swing.JLabel lbllogoWaitRoom;
+    private javax.swing.JLabel lbllogoWinner;
     private javax.swing.JLabel lblwl1;
     private javax.swing.JLabel lblwl2;
     private javax.swing.JPanel pnlMy;

@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,11 +34,10 @@ public class ServerBackground {
         gameroom = new GameRoom();
         gameroom.setMaxIn(10);
         gameroom.setRoomId("0");
-        gameroom.setRoomName("looby");
+        gameroom.setRoomName("lobby");
         manage.AddRoom(gameroom);
-        
+        System.out.println("서버를 시작합니다!");
         while (true) {
-            //System.out.println("");
             socket = serverSocket.accept();
             System.out.println(socket.getInetAddress() + "호스트 접속됨.");
             Receiver receiver = new Receiver(socket);
@@ -94,7 +94,7 @@ public class ServerBackground {
         gameroom = new GameRoom();
         gameroom.setRoomName(gameName);
         gameroom.setRoomId(manage.setRoomId());
-        gameroom.setRoomMake(playerMap.get(id).getNickname());
+        gameroom.setRoomMaker(playerMap.get(id).getNickname());
         manage.AddRoom(gameroom);
         manage.AddPlayer(gameroom.getRoomId(), playerMap.get(id));
         playerMap.get(id).setRoomId(gameroom.getRoomId());
@@ -169,14 +169,39 @@ public class ServerBackground {
             }
             for(int i=0; i< room.getPlayerlist().size();i++){
                 Player player = room.getPlayerlist().get(i);
-                System.out.println(room.getPlayerlist().size());
                 if(room.getPlayerlist().size()==1){
                     clientsMap.get(player.getId()).writeUTF("Readyrefresh,"+room.getReadylist().get(0)+",X");
                 }else{
                     clientsMap.get(player.getId()).writeUTF("Readyrefresh,"+room.getReadylist().get(0)+","+room.getReadylist().get(1));
                 }
             }
-            
+            if(room.getReadylist().get(0)==1&&room.getReadylist().get(1)==1){
+                room.getReadylist().set(0, 0);
+                room.getReadylist().set(1, 0);
+                // 모두 레디 상태이면 > 게임 시작
+                int rand = (int)(Math.random()*2)+1;
+                String[] whoseTurnList = new String[]{"my","your"};
+                String[] cards = new String[]{"b1","b2","b3","b4","b5","g1","g2","g3","g4","g5","i1","i2","i3","i4","i5","o1","o2","o3","o4","o5","w1","w2","w3","w4","w5","d1","d2","d3","d4","d5"};
+                ArrayList<String> u1 = new ArrayList<String>();
+                ArrayList<String> u2 = new ArrayList<String>();
+                for(int i=0;i<cards.length;i++)
+                {
+                    int r = (int)(Math.random()*30);
+                    String tmp = cards[r];
+                    cards[r] = cards[0];
+                    cards[0] = tmp;
+                }
+                for(int i=0;i<15;i++){
+                    u1.add(cards[i]);
+                    u2.add(cards[i+15]);
+                }
+                for(int i=0; i< room.getPlayerlist().size();i++){
+                    Player player = room.getPlayerlist().get(i);
+                    String mycard = i==0 ? u1.toString().replace(",", "#"): u2.toString().replace(",", "#");
+                    String yourcard = i==0 ? u2.toString().replace(",", "#"): u1.toString().replace(",", "#");
+                    clientsMap.get(player.getId()).writeUTF("GameStart,"+whoseTurnList[(rand+i)%2]+","+mycard+","+yourcard);
+                }
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -198,7 +223,7 @@ public class ServerBackground {
         }
     }
 
-    public void refresh(String id){
+    public void refresh(){
         try {
             Iterator<String> it = clientsMap.keySet().iterator();
             String key = "";
@@ -243,7 +268,7 @@ public class ServerBackground {
                     String[] a = msg.split(",");
                     //System.out.println(msg);
                     if(a[0].equals("f5")){
-                        refresh(a[1]);
+                        refresh();
                     }
                     if(a[0].equals("create")){
                         createRoom(a[1], a[2]);
@@ -265,6 +290,64 @@ public class ServerBackground {
                         GameRoom room = manage.getRoomById(playerMap.get(a[1]).getRoomId());
                         for(Player tmp:room.getPlayerlist()){
                             clientsMap.get(tmp.getId()).writeUTF("exitInGame,");
+                        }
+                    }
+                    if(a[0].equals("sendmycard")){
+                        GameRoom room = manage.getRoomById(playerMap.get(a[1]).getRoomId());
+                        for(Player tmp:room.getPlayerlist()){
+                            if(!tmp.getId().equals(a[1]))
+                                clientsMap.get(tmp.getId()).writeUTF("receiveyourcard,");
+                            clientsMap.get(tmp.getId()).writeUTF("nextTurn,");
+                        }
+                    }
+                    if(a[0].equals("BellNotClick")){
+                        GameRoom room = manage.getRoomById(playerMap.get(a[1]).getRoomId());
+                        if(room.getRoomMaker().equals(playerMap.get(a[1]).getNickname())){
+                            for(Player tmp:room.getPlayerlist()){
+                                clientsMap.get(tmp.getId()).writeUTF("nextTurn,");
+                            }
+                        }
+                    }
+                    if(a[0].equals("bellClick")){
+                        GameRoom room = manage.getRoomById(playerMap.get(a[2]).getRoomId());
+                        String my = a[1].split("#")[0].trim();
+                        String your = a[1].split("#")[1].trim();
+                        if(my.substring(0,1).equals(your.substring(0,1))){ // 같은 종류의 카드이면
+                            if((Integer.parseInt(my.substring(1))+Integer.parseInt(your.substring(1)))==5){ // 개수가 총 5개이면
+                                for(Player tmp:room.getPlayerlist()){
+                                    if(tmp.getId().equals(a[2])){ // 벨 누른 본인이면
+                                        clientsMap.get(tmp.getId()).writeUTF("getAllCard,");
+                                    }else{ // 본인이 아니면
+                                        clientsMap.get(tmp.getId()).writeUTF("LoseAllCard,");
+                                    }
+                                }
+                            }else{ // 아닌데도 눌렀으면
+                                for(Player tmp:room.getPlayerlist()){
+                                    if(tmp.getId().equals(a[2])){ // 벨 누른 본인이면
+                                        clientsMap.get(tmp.getId()).writeUTF("givemycard,");
+                                    }else{ // 본인이 아니면
+                                        clientsMap.get(tmp.getId()).writeUTF("getyourcard,");
+                                    }
+                                }
+                            }
+                        }else{ // 다른 종류의 카드이면
+                            if(Integer.parseInt(my.substring(1))==5 || Integer.parseInt(your.substring(1))==5){ // 둘 중 하나가 5개이면
+                                for(Player tmp:room.getPlayerlist()){
+                                    if(tmp.getId().equals(a[2])){ // 벨 누른 본인이면
+                                        clientsMap.get(tmp.getId()).writeUTF("getAllCard,");
+                                    }else{ // 본인이 아니면
+                                        clientsMap.get(tmp.getId()).writeUTF("LoseAllCard,");
+                                    }
+                                }
+                            }else{ // 아닌데도 눌렀으면
+                                for(Player tmp:room.getPlayerlist()){
+                                    if(tmp.getId().equals(a[2])){ // 벨 누른 본인이면
+                                        clientsMap.get(tmp.getId()).writeUTF("givemycard,");
+                                    }else{ // 본인이 아니면
+                                        clientsMap.get(tmp.getId()).writeUTF("getyourcard,");
+                                    }
+                                }
+                            }
                         }
                     }
                     System.out.println(msg);

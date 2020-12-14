@@ -25,6 +25,9 @@ public class GameRoom {
 	public GameRoom() {
 		playerlist = new ArrayList<Player>();
 		readylist = new ArrayList<Integer>();
+                readylist.add(0);
+                readylist.add(0);
+                
 		nowIn = 0;
 		maxIn = 2;
                 ready = 0;
@@ -50,7 +53,7 @@ public class GameRoom {
 		return roomMaker;
 	}
 
-	public void setRoomMake(String roomMaker) {
+	public void setRoomMaker(String roomMaker) {
 		this.roomMaker = roomMaker;
 	}
 	
