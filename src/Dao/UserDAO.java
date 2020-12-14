@@ -21,7 +21,7 @@ public class UserDAO {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
     
@@ -39,8 +39,8 @@ public class UserDAO {
                     return false;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return false;
     }
@@ -63,8 +63,8 @@ public class UserDAO {
             userinfo.setDate(rs.getString(6).split(" ")[0]);
             
             return userinfo;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -80,8 +80,8 @@ public class UserDAO {
             }else{
                 return false;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return true;
     }
@@ -97,8 +97,8 @@ public class UserDAO {
             }else{
                 return false;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return true;
     }
@@ -113,8 +113,8 @@ public class UserDAO {
             pstmt.setString(3, nickname);
 
             pstmt.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
     
@@ -127,8 +127,8 @@ public class UserDAO {
             pstmt.setString(1, pwd);
             pstmt.setString(2, id);
             pstmt.executeUpdate();
-        } catch (Exception e) {
-            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
